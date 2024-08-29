@@ -1,0 +1,7 @@
+nohup: ignoring input
+ cell id  0
+ cell id  1
+Traceback (most recent call last):
+  File "/www/projects/Spillover_2/nmda_plateaus_d2_x.py", line 41, in <module>
+    variables = model_sets[cell_ID]['variables']
+KeyError: 58
