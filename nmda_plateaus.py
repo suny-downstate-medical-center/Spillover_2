@@ -13,8 +13,8 @@ Created on Thu Dec 15 17:48:41 2016
 """
 
 from neuron import h
-import d1msn as msn
-#import iMSN
+# import d1msn as msn
+import d2msn as msn
 import spillover_experiment as pe
 import pickle
 import parameters as p
@@ -27,17 +27,32 @@ import scipy.signal as ss
 # --- 1. Create a cell and other useful stuff
 dMSN_library = 'D1_71bestFit_updRheob.pkl'
 iMSN_library = 'D2_34bestFit_updRheob.pkl' 
-with open(dMSN_library, 'rb') as f:
+
+# with open(dMSN_library, 'rb') as f:
+#     model_sets  = pickle.load(f, encoding="latin1")
+
+with open(iMSN_library, 'rb') as f:
     model_sets  = pickle.load(f, encoding="latin1")
 
-cell_ID = 34
+cell_ID = 22
+print (model_sets.keys())
 #cell_ID = 1
 variables = model_sets[cell_ID]['variables'] 
 #cell = iMSN.iMSN(variables = variables) 
 cell = msn.MSN(variables = variables) 
 
-for d in p.input_dends:
-    cell.dendlist[d].nseg *=5
+# for d in p.input_dends:
+#     cell.dendlist[d].nseg *=5
+d_counter = 0
+
+for d in cell.dendlist:
+
+    print (" counter ", d_counter)
+    try:
+        cell.dendlist[d_counter].nseg *= 5
+    except:
+        pass
+    d_counter += 1
 
 print(cell.max_dist())
 
@@ -151,4 +166,4 @@ to_save = json.dumps(res_dict)
 #with open(filename,'w', encoding = 'utf-8') as f:
 #    json.dump(to_save, f)
 
-plt.show()
+plt.savefig("d2_4.png")

@@ -9,18 +9,22 @@ import os, sys, traceback
 
 mod        = "./mod/"
 params  = "./params_dMSN.json"
-morphology = "./morphology/MSN_morphology_D1.swc"
+# morphology = "./morphology/msn_morphologies/morphology_4/D1/dSPN-SNI-A1S1N1.CNG.swc"
+morphology = "./morphology/WT-dMSN_P270-20_1.02_SGA1-m24.swc"
 
 h.load_file('stdlib.hoc')
 h.load_file('import3d.hoc')
-h.nrn_load_dll(mod + 'x86_64/.libs/libnrnmech.so')
-
+try:
+    h.nrn_load_dll(mod + 'x86_64/.libs/libnrnmech.so')
+except:
+    pass
 #h.nrn_load_dll('/pdc/vol/neuron/7.4-py27/x86_64/.libs/libnrnmech.so')
 
 # ======================= the MSN class ==================================================
 
 class MSN(n.Neuron):
     def __init__(self, morphology = morphology,  params = params, variables = None):
+        self.morphology = morphology
         self.create_morphology()
         self.error = False
         self.insert_channels(variables)
@@ -31,7 +35,7 @@ class MSN(n.Neuron):
         
     def create_morphology(self):    
         Import = h.Import3d_SWC_read()
-        Import.input(morphology)
+        Import.input(self.morphology)
         imprt = h.Import3d_GUI(Import, 0)
         imprt.instantiate(None)
         h.define_shape()
@@ -194,9 +198,13 @@ class MSN(n.Neuron):
                 self.axonlist.append(sec)
             if sec.name().find('dend') >= 0:
                 self.dendlist.append(sec)
+        if len(self.somalist) == 0:
+            print ( " ::::::: !!!!!!! no soma !!!!!!!! ::::::: ")
+            sys.exit(1)
         
     def distribute_channels(self, as1, as2, d3, a4, a5, a6, a7, g8):
         # print ("111 d3 ", d3, " a4 ", a4 , " a5 ", a5, " a6 ", a6, " a7 ", a7, " g8", g8 )
+        print (" self.somalist ------------ " , self.dendlist)
         h.distance(sec=self.somalist[0])
         for sec in self.all:
             if sec.name().find(as1) >= 0:
@@ -212,7 +220,7 @@ class MSN(n.Neuron):
         for sec in as1:
             for seg in self.dendlist[sec]:
                 dist = h.distance(seg.x, sec=self.dendlist[sec])
-                print ("111 d3 ", d3, " a4 ", a4 , " a5 ", a5, " a6 ", a6, " a7 ", a7, " g8", g8 )
+                # print ("111 d3 ", d3, " a4 ", a4 , " a5 ", a5, " a6 ", a6, " a7 ", a7, " g8", g8 )
                 val = self.calculate_distribution(d3, dist, a4, a5, a6, a7, g8)
                 cmd = 'seg.%s = %g' % (as2, val)
                 exec(cmd)
@@ -224,13 +232,15 @@ class MSN(n.Neuron):
         # dist is the somatic distance
         # a4-a7 are distribution parameters 
         # g8 is the maximal conductance
+        # print (" dist-a6 ", dist-a6)
+        # print (" a7 ", a7)
         if   d3 == 0: 
             value = a4 + a5*dist
         elif d3 == 1: 
-            # print (" dist-a6 ", dist-a6)
-            # print (" a7 ", a7)
             value = 0
             try:
+                # print (" @@@@@@@@@@ dist-a6 ", dist-a6)
+               
                 value = a4 + a5/(1 + exp((dist-a6)/a7) )
             except:
                 traceback.print_exc(file=sys.stdout)
@@ -267,6 +277,7 @@ class MSN(n.Neuron):
         spine_step = 1.0/num_spines
         for sec in section_list:
             for i in range(0, num_spines):
+                print ( " end_pos ", str(end_pos), " start_pos ", str(start_pos) ) 
                 pos = end_pos - (end_pos - start_pos)*i*spine_step
                 spine_name = 'spine_' + self.dendlist[sec].name() + '(' + str(pos) + ')'
                 s = sp.Spine(self.dendlist[sec], spine_name)

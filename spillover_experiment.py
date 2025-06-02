@@ -23,22 +23,25 @@ import seaborn as sns
 
 class Spillover_Experiment(e.Experiment):
     
-    def __init__(self, exptype, cell, dendstatobj = [], training_mode = p.training_mode):
+    def __init__(self, exptype, cell, dendstatobj = [], training_mode = p.training_mode, input_dends=p.input_dends, cluster_start_pos = p.cluster_start_pos, cluster_end_pos = p.cluster_end_pos):
         super(Spillover_Experiment, self).__init__()
-        # self.exptype = exptype
-        # self.cell = cell
-        # self.dendstatobj = dendstatobj
-        # self.training_mode = training_mode
-        # self.spike_flags = []
-        # self.exglusec = []
-        # self.exglu = []
-        # self.exnc = []
-        # if (str(type(cell))).find('MSN') != -1:
-        #     self.celltype = 'MSN'
+        self.exptype = exptype
+        self.cell = cell
+        self.dendstatobj = dendstatobj
+        self.training_mode = training_mode
+        self.spike_flags = []
+        self.exglusec = []
+        self.exglu = []
+        self.exnc = []
+        p.input_dends = input_dends
+        p.cluster_start_pos = cluster_start_pos
+        p.cluster_start_pos = cluster_end_pos
+        if (str(type(cell))).find('MSN') != -1:
+            self.celltype = 'MSN'
                 
-        # elif (str(type(cell))).find('L5PC') != -1:
-        #     self.celltype = 'L5PC'            
-        #     self.insert_synapses('L5PC')
+        elif (str(type(cell))).find('L5PC') != -1:
+            self.celltype = 'L5PC'            
+            self.insert_synapses('L5PC')
         
     def insert_synapses(self, syntype, syn_loc = [], deterministic = 0, 
                         num_syns = p.distributed_input_size, add_spine = 0, on_spine = 0):

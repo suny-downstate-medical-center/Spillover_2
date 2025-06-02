@@ -6,20 +6,24 @@ import neuron_cls as n
 import spine as sp
 import parameters as p
 
-mod        = "./mod/"
+mod = "./mod/"
 params  = "./params_iMSN.json"
-morphology = "./morphology/WT-iMSN_P270-09_1.01_SGA2-m1.swc"
+# morphology = "./morphology/WT-iMSN_P270-09_1.01_SGA2-m1.swc"
+morphology = "./morphology/msn_morphologies/morphology_4/D2/iSPN-Sham-A1S2N2.CNG.swc"
 
 h.load_file('stdlib.hoc')
 h.load_file('import3d.hoc')
-h.nrn_load_dll(mod + 'x86_64/.libs/libnrnmech.so')
-
+try:
+    h.nrn_load_dll(mod + 'x86_64/.libs/libnrnmech.so')
+except:
+    pass
 #h.nrn_load_dll('/pdc/vol/neuron/7.4-py27/x86_64/.libs/libnrnmech.so')
 
 # ======================= the MSN class ==================================================
 
 class MSN(n.Neuron):
     def __init__(self, morphology = morphology,  params = params, variables = None):
+        self.morphology = morphology
         self.create_morphology()
         self.insert_channels(variables)
         self.esyn = []
@@ -29,7 +33,7 @@ class MSN(n.Neuron):
         
     def create_morphology(self):    
         Import = h.Import3d_SWC_read()
-        Import.input(morphology)
+        Import.input(self.morphology)
         imprt = h.Import3d_GUI(Import, 0)
         imprt.instantiate(None)
         h.define_shape()
@@ -40,6 +44,42 @@ class MSN(n.Neuron):
         self.v_init = -80
                    
     def insert_channels(self, variables = None):
+
+        self.dendritic_channels =   [
+                    "naf",      
+                    "kaf",
+                    "kas",
+                    "kdr",
+                    "kir",
+                    "cal12",
+                    "cal13",
+                    "can",
+                    "car",
+                    "cav32",
+                    "cav33",
+                    "sk",
+                    "bk"            ]
+                
+        self.somatic_channels = [
+                    "naf",
+                    "kaf",
+                    "kas",
+                    "kdr",
+                    "kir",
+                    "cal12",
+                    "cal13",
+                    "can",
+                    "car",
+                    "sk",
+                    "bk"        ]
+                    
+        self.axonal_channels = [
+                    "naf",
+                    "kas",
+                    "Im"     ]
+
+
+        
         self.dendritic_channels =   [
                     "naf",      
                     "kaf",
@@ -189,6 +229,8 @@ class MSN(n.Neuron):
                 self.axonlist.append(sec)
             if sec.name().find('dend') >= 0:
                 self.dendlist.append(sec)
+        if len(self.somalist) == 0:
+            sys.exit(1)
         
     def distribute_channels(self, as1, as2, d3, a4, a5, a6, a7, g8):
         h.distance(sec=self.somalist[0])

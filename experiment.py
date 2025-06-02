@@ -64,7 +64,6 @@ class Experiment(object):
             syn.nc.append(h.NetCon(syn.stim[-1], syn.obj))      
             syn.nc[-1].delay = 0
             syn.nc[-1].weight[0] = p.g_inhexpsyn_max
-
     def synapse_distribution(self, celltype, dend):
         if celltype == 'MSN':
             # Synapses according to Cheng et al. Experimental Neurobiology, 147:287-298 (1997)                

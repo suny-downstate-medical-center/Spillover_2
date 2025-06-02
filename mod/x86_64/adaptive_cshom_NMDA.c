@@ -463,7 +463,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  pnt_receive[_mechtype] = _net_receive;
  pnt_receive_size[_mechtype] = 5;
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 adaptive_cshom_NMDA /u/sid/Spillover_2/mod/adaptive_cshom_NMDA.mod\n");
+ 	ivoc_help("help ?1 adaptive_cshom_NMDA /mnt/data/Spillover_2/mod/adaptive_cshom_NMDA.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
@@ -942,7 +942,7 @@ _first = 0;
 }
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/u/sid/Spillover_2/mod/adaptive_cshom_NMDA.mod";
+static const char* nmodl_filename = "/mnt/data/Spillover_2/mod/adaptive_cshom_NMDA.mod";
 static const char* nmodl_file_text = 
   "\n"
   "\n"

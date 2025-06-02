@@ -24,6 +24,56 @@ class Neuron(object):
         self.esyn = []
         self.isyn = []
         self.spines = []
+
+    def get_sec_maps(self):
+        parent_sec_map = {}
+        child_sec_map = {}
+        sibling_sec_map = {}
+        sec_list = []
+        for sec in h.allsec():
+            sec_list.append(sec)
+            print(" sec " , sec)
+            print(" h.SectionRef(sec=sec).parent " , h.SectionRef(sec=sec))
+
+            try:
+                if  h.SectionRef(sec=sec).parent and h.SectionRef(sec=sec).parent.name().find('soma') == -1 :
+                    parent_sec = h.SectionRef(sec=sec).parent
+                    if sec not in parent_sec_map:
+                        parent_sec_map[sec] = parent_sec
+                    if parent_sec not in child_sec_map:
+                        child_sec_map[parent_sec] = []
+                    child_sec_map[parent_sec].append(sec)
+            except:
+                pass
+        for sec in sec_list:
+            if sec in parent_sec_map:
+                parent_sec = parent_sec_map[sec]
+                if parent_sec in child_sec_map:
+                    children = child_sec_map[parent_sec]
+                    if sec not in sibling_sec_map:
+                        sibling_sec_map[sec] = []
+                        for child in children:
+                            if child.name() != sec.name():
+                                sibling_sec_map[sec].append(child)
+        # return parent_sec_map, child_sec_map, sibling_sec_map
+        return parent_sec_map, child_sec_map, sibling_sec_map
+    
+    def getParentDendrites2(sec, parentsecList):
+        if  h.SectionRef(sec=sec).parent and h.SectionRef(sec=sec).parent.name().find('soma') == -1 :
+            parentSec = h.SectionRef(sec=sec).parent
+            parentsecList.append(parentSec)
+            return getParentDendrites2(parentSec,parentsecList)
+        else:
+            return parentsecList
+    
+    def getFullDendrite(sec, secMap,parentSet):
+     if  sec in secMap and len(secMap[sec]) > 0:
+         for parentSec in secMap[sec]:
+             parentSet.add(parentSec)
+             return getFullDendrite(parentSec,secMap, parentSet)
+     else:
+    
+         return parentSet
         
     def create_morphology(self):
         """Create the cell morphology, including axial resistance and membrane capacitance."""
@@ -681,7 +731,9 @@ class Neuron(object):
             if axon_excluding and sec.name().find('axon') == 0: 
                 continue
             dmax = max(dmax, h.distance(1, sec=sec))
-        return dmax
+        print ( " ----------- ############## max dist ############## --------------- ", dmax)
+
+        return dmax, sec
         
     def get_nsegs(self):
         """Returns the number of segments in the neuron model."""
