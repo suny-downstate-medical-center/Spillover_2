@@ -38,7 +38,7 @@ extern double hoc_Exp(double);
 	/*SUPPRESS 762*/
 	/*SUPPRESS 763*/
 	/*SUPPRESS 765*/
-	 extern double *getarg();
+	 extern double *getarg(int);
  /* Thread safe. No static _p or _ppvar. */
  
 #define t _nt->_t
@@ -222,7 +222,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
   hoc_register_dparam_semantics(_mechtype, 0, "area");
   hoc_register_dparam_semantics(_mechtype, 1, "pntproc");
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 gaba /mnt/data/Spillover_2/mod/gaba.mod\n");
+ 	ivoc_help("help ?1 gaba /home/shadeform/Spillover_2/mod/gaba.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
@@ -378,7 +378,7 @@ _first = 0;
 #endif
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/mnt/data/Spillover_2/mod/gaba.mod";
+static const char* nmodl_filename = "/home/shadeform/Spillover_2/mod/gaba.mod";
 static const char* nmodl_file_text = 
   ": this model is built-in to neuron with suffix gaba\n"
   ": Schaefer et al. 2003\n"

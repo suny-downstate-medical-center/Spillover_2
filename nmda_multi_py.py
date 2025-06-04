@@ -6,8 +6,8 @@ import subprocess
 
 def run_sim(neuron_id,neuron_name,archive,length,cell_type_val):
     # print(neuron_id,neuron_name,archive,length,cell_type_val)
-    print ('python', 'nmda_plateaus_x.py',neuron_id, neuron_name, archive, length, cell_type_val)
-    process = subprocess.Popen(['python', 'nmda_plateaus_x.py',neuron_id, neuron_name, archive, length, cell_type_val], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print ('python', 'nmda_plateaus_final.py',neuron_id, neuron_name, archive, length, cell_type_val)
+    process = subprocess.Popen(['python', 'nmda_plateaus_final.py',neuron_id, neuron_name, archive, length, cell_type_val], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate() 
     print ( stdout, stderr)
     return "finished"

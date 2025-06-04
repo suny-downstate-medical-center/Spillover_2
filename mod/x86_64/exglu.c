@@ -38,7 +38,7 @@ extern double hoc_Exp(double);
 	/*SUPPRESS 762*/
 	/*SUPPRESS 763*/
 	/*SUPPRESS 765*/
-	 extern double *getarg();
+	 extern double *getarg(int);
  static double *_p; static Datum *_ppvar;
  
 #define t nrn_threads->_t
@@ -203,7 +203,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  pnt_receive[_mechtype] = _net_receive;
  pnt_receive_size[_mechtype] = 1;
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 exglu /mnt/data/Spillover_2/mod/exglu.mod\n");
+ 	ivoc_help("help ?1 exglu /home/shadeform/Spillover_2/mod/exglu.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
@@ -217,7 +217,7 @@ static void _modl_cleanup(){ _match_recurse=1;}
  
 static void _net_receive (Point_process* _pnt, double* _args, double _lflag) 
 {    _p = _pnt->_prop->param; _ppvar = _pnt->_prop->dparam;
-  if (_tsav > t){ extern char* hoc_object_name(); hoc_execerror(hoc_object_name(_pnt->ob), ":Event arrived out of order. Must call ParallelContext.set_maxstep AFTER assigning minimum NetCon.delay");}
+  if (_tsav > t){ extern char* hoc_object_name(Object*); hoc_execerror(hoc_object_name(_pnt->ob), ":Event arrived out of order. Must call ParallelContext.set_maxstep AFTER assigning minimum NetCon.delay");}
  _tsav = t; {
    glu = glu + _args[0] ;
    } }
@@ -336,7 +336,7 @@ _first = 0;
 }
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/mnt/data/Spillover_2/mod/exglu.mod";
+static const char* nmodl_filename = "/home/shadeform/Spillover_2/mod/exglu.mod";
 static const char* nmodl_file_text = 
   "TITLE Very simple glutamate accumulation\n"
   "\n"

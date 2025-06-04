@@ -39,7 +39,7 @@ extern double hoc_Exp(double);
 	/*SUPPRESS 762*/
 	/*SUPPRESS 763*/
 	/*SUPPRESS 765*/
-	 extern double *getarg();
+	 extern double *getarg(int);
  static double *_p; static Datum *_ppvar;
  
 #define t nrn_threads->_t
@@ -370,7 +370,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  pnt_receive_init[_mechtype] = _net_init;
  pnt_receive_size[_mechtype] = 8;
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 adaptive_shom_AMPA_stp /mnt/data/Spillover_2/mod/adaptive_shom_AMPA_stp.mod\n");
+ 	ivoc_help("help ?1 adaptive_shom_AMPA_stp /home/shadeform/Spillover_2/mod/adaptive_shom_AMPA_stp.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
@@ -411,7 +411,7 @@ static int _ode_spec1(_threadargsproto_);
  
 static void _net_receive (Point_process* _pnt, double* _args, double _lflag) 
 {    _p = _pnt->_prop->param; _ppvar = _pnt->_prop->dparam;
-  if (_tsav > t){ extern char* hoc_object_name(); hoc_execerror(hoc_object_name(_pnt->ob), ":Event arrived out of order. Must call ParallelContext.set_maxstep AFTER assigning minimum NetCon.delay");}
+  if (_tsav > t){ extern char* hoc_object_name(Object*); hoc_execerror(hoc_object_name(_pnt->ob), ":Event arrived out of order. Must call ParallelContext.set_maxstep AFTER assigning minimum NetCon.delay");}
  _tsav = t;   if (_lflag == 1. ) {*(_tqitem) = 0;}
  {
    _args[5] = _args[5] * exp ( - ( t - _args[7] ) / tauR ) ;
@@ -690,7 +690,7 @@ _first = 0;
 }
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/mnt/data/Spillover_2/mod/adaptive_shom_AMPA_stp.mod";
+static const char* nmodl_filename = "/home/shadeform/Spillover_2/mod/adaptive_shom_AMPA_stp.mod";
 static const char* nmodl_file_text = 
   "TITLE simple AMPA receptors\n"
   "\n"

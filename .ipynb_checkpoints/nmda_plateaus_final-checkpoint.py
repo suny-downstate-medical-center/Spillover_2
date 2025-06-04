@@ -121,11 +121,11 @@ class nmda_sim:
             if sec.name().find('soma') == -1:
                 for seg in sec:
                     seg_list.append(seg)
-                if sec in sibling_sec_map:
-                    siblings = sibling_sec_map[sec]
-                    for sibling in siblings:
-                        for seg in sibling:
-                            seg_list.append(seg)                        
+                # if sec in sibling_sec_map:
+                #     siblings = sibling_sec_map[sec]
+                #     for sibling in siblings:
+                #         for seg in sibling:
+                #             seg_list.append(seg)                        
             cyt = rxd.Region(h.allsec())
             param = rxd.Parameter(cyt)
     
